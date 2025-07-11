@@ -1,4 +1,6 @@
-﻿namespace Catalog.API.Products.UpdateProduct;
+﻿using FluentValidation;
+
+namespace Catalog.API.Products.UpdateProduct;
 
 public record UpdateProductCommand(
     Guid Id,
@@ -10,6 +12,19 @@ public record UpdateProductCommand(
     : ICommand<UpdateProductResult>;
 
 public record UpdateProductResult(bool IsSuccess);
+
+
+public class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
+{
+    public UpdateProductCommandValidator()
+    {
+        RuleFor(x => x.Id).NotEmpty().WithMessage("Product Id is required.");
+        RuleFor(x => x.Name).NotEmpty().WithMessage("Product Name is required.");
+        RuleFor(x => x.Categories).NotEmpty().WithMessage("At least one category is required.");
+        RuleFor(x => x.ImageFile).NotEmpty().WithMessage("Image file is required.");
+        RuleFor(x => x.Price).GreaterThan(0).WithMessage("Product Price must be greater than zero.");
+    }
+}
 
 internal class UpdateProductCommandHandler(IDocumentSession session) :
     ICommandHandler<UpdateProductCommand, UpdateProductResult>
