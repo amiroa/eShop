@@ -34,7 +34,7 @@ internal class UpdateProductCommandHandler(IDocumentSession session) :
         var product = await session.LoadAsync<Product>(command.Id, cancellationToken);
         if (product is null)
         {
-            throw new ProductNotFoundException($"Product with Id {command.Id} not found in the catalog.");
+            throw new ProductNotFoundException(command.Id);
         } else
         {
             product.Name = command.Name;
