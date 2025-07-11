@@ -13,7 +13,6 @@ internal class GetProductByIdQueryHandler(IDocumentSession session)
         var product = await session.LoadAsync<Product>(query.Id, cancellationToken);
         if (product is null)
         {
-            logger.LogWarning("Product with Id {Id} not found", query.Id);
             throw new ProductNotFoundException(query.Id);
         } else
         {

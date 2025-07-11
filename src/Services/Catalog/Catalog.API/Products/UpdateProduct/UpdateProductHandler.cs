@@ -5,7 +5,7 @@ namespace Catalog.API.Products.UpdateProduct;
 public record UpdateProductCommand(
     Guid Id,
     string Name,
-    List<string> Categories,
+    List<string> Category,
     string Description,
     string ImageFile,
     decimal Price)
@@ -20,7 +20,7 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
     {
         RuleFor(x => x.Id).NotEmpty().WithMessage("Product Id is required.");
         RuleFor(x => x.Name).NotEmpty().WithMessage("Product Name is required.");
-        RuleFor(x => x.Categories).NotEmpty().WithMessage("At least one category is required.");
+        RuleFor(x => x.Category).NotEmpty().WithMessage("At least one category is required.");
         RuleFor(x => x.ImageFile).NotEmpty().WithMessage("Image file is required.");
         RuleFor(x => x.Price).GreaterThan(0).WithMessage("Product Price must be greater than zero.");
     }
@@ -40,7 +40,7 @@ internal class UpdateProductCommandHandler(IDocumentSession session) :
             product.Name = command.Name;
             product.Description = command.Description;
             product.Price = command.Price;
-            product.Categories = command.Categories;
+            product.Category = command.Category;
             product.ImageFile = command.ImageFile;
 
             // Save to database
